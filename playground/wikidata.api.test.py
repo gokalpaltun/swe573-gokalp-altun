@@ -1,5 +1,4 @@
 
-
 import sys
 from SPARQLWrapper import SPARQLWrapper, JSON
 
@@ -35,4 +34,3 @@ for result in results["results"]["bindings"]:
   print(result['medianIncome']['value'],
   result['countryLabel']['value'],
   result['capitalLabel']['value'])
-
