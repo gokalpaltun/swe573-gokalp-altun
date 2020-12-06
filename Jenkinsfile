@@ -7,14 +7,14 @@ pipeline {
         //         git 'https://github.com/gokalpaltun/swe573-gokalp-altun.git'
         //   }
         // }
-        stage("Compose down all containers and remove all") {
-            steps {
-                echo "========Down compose...========"
-                script{
-                    sh "docker-compose down"
-                }
-            }
-        }
+        // stage("Compose down all containers and remove all") {
+        //     steps {
+        //         echo "========Down compose...========"
+        //         script{
+        //             sh "docker-compose down"
+        //         }
+        //     }
+        // }
         stage("Build all containers with new Image and up with compose"){
             steps{
                 script{
