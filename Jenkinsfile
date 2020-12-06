@@ -1,26 +1,26 @@
 pipeline {
     agent any
     stages {
-        // stage('Cloning Git') {
-        //   steps{
-        //         echo "========Git Repo Cloning...========"
-        //         git 'https://github.com/gokalpaltun/swe573-gokalp-altun.git'
-        //   }
-        // }
-        // stage("Compose down all containers and remove all") {
-        //     steps {
-        //         echo "========Down compose...========"
-        //         script{
-        //             sh "docker-compose down"
-        //         }
-        //     }
-        // }
+        stage('Cloning Git') {
+          steps{
+                echo "========Git Repo Cloning...========"
+                /usr/bin/git 'https://github.com/gokalpaltun/swe573-gokalp-altun.git'
+          }
+        }
+        stage("Compose down all containers and remove all") {
+            steps {
+                echo "========Down compose...========"
+                script{
+                    sh "/usr/local/bin/docker-compose down"
+                }
+            }
+        }
         stage("Build all containers with new Image and up with compose"){
             steps{
                 script{
                     try {
-                        sh "docker-compose build"
-                        sh "docker-compose up"
+                        sh "/usr/local/bin/docker-compose build"
+                        sh "/usr/local/bin/docker-compose up"
                     } catch (Exception e) {
                         echo 'Exception occurred: ' + e.toString()
                     }
@@ -31,7 +31,7 @@ pipeline {
             steps { 
                 script {
                     try {
-                        sh "docker system prune -f" 
+                        sh "/usr/local/bin/docker system prune -f" 
                     }
                     catch (Exception e) {
                         echo 'Exception occurred: ' + e.toString()
