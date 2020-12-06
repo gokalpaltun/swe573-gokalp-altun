@@ -11,20 +11,14 @@ class UserService:
             login(request, user)
             token = UserService.renew_token(user)
             return {'user': user, 'token': token}
-        else:
-            return {}
 
     @staticmethod
     def signup(request, username, password, email):
-        try:
-            user = User.objects.get(Q(username=username) | Q(email=email))
-            if user is not None:
-                return "user already exists"
-        except Exception as exc:
-            user = User.objects.create_user(username=username, password=password, email=email)
-            if user is not None:
-                return UserService.login(request, username=username, password=password)
-            return "no"
+        user = User.objects.get(Q(username=username) | Q(email=email))
+        if user is not None:
+            return None
+        user = User.objects.create_user(username=username, password=password, email=email)
+        return UserService.login(request, username=username, password=password)
 
     @staticmethod
     def renew_token(user):
