@@ -1,0 +1,36 @@
+version: "3.2"
+services:
+  pandemic_api:
+    restart: always
+    container_name: pandemic_api
+    command : bash -c "python manage.py makemigrations && 
+                      python manage.py migrate &&
+                      python manage.py runserver 0.0.0.0:8000"
+    # env_file:
+    #   - ./pandemic_api/settings.ini
+    build:
+      context: ./pandemic_api/
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    networks:
+      - db-net
+
+  pandemic-ui:
+    restart: always
+    command : npm start
+    container_name: pandemic-ui
+    build:
+      context: ./pandemic-ui/
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    stdin_open: true
+    depends_on:
+      - pandemic_api
+    networks:
+      - db-net
+
+networks:
+  db-net:
+    driver: bridge
