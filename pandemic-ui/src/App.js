@@ -33,7 +33,7 @@ class App extends Component {
     return (
       <div className="App">
         <div className="App-header">
-          <h2>Welcome to Pandemics Tweets</h2>
+          <h2>Welcome to Pandemics Tweets First build</h2>
           <input onChange={this.handleUserNameChange}></input>
           <input onChange={this.handlePasswordChange}></input>
           <button onClick={this.handleLogin}> hello</button>
