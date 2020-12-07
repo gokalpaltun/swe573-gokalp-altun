@@ -40,7 +40,7 @@ def login(request):
             user_token['token'], many=False).data
         res["user"] = serializers.UserSerializer(
             user_token['user'], many=False).data
-        return JsonResponse(res)
+        return Response(res)
     else:
         raise errors.UserCannotLogin()
 
@@ -58,7 +58,7 @@ def signup(request):
             user_token['token'], many=False).data
         res["user"] = serializers.UserSerializer(
             user_token['user'], many=False).data
-        return JsonResponse(res)
+        return Response(res)
     else:
         raise errors.UserAlreadyExists()
 
@@ -69,4 +69,4 @@ def hello(request):
     if request.user.is_anonymous:
         raise errors.AnonymousUserError()
     user = serializers.UserSerializer(request.user, many=False).data
-    return JsonResponse(user)
+    return Response(user)
