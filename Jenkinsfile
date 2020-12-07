@@ -12,7 +12,7 @@ pipeline {
                 script{
                     try {
                         sh "docker-compose build"
-                        sh "docker-compose up"
+                        sh "docker-compose up -d"
                     } catch (Exception e) {
                         echo 'Exception occurred: ' + e.toString()
                     }
