@@ -13,30 +13,11 @@ class App extends Component {
     };
   }
 
-  handleLogin = async () => {
-    let data = this.state;
-    try {
-      const res = await axios.get("http://127.0.0.1:8000/api/v1/hello/");
-    } catch (error) {
-      console.log(error.response);
-    }
-  };
-  handleUserNameChange = (e) => {
-    this.setState({ username: e.target.value });
-  };
-
-  handlePasswordChange = (e) => {
-    this.setState({ password: e.target.value });
-  };
-
   render() {
     return (
       <div className="App">
         <div className="App-header">
-          <h2>Welcome to Pandemics Tweets First build</h2>
-          <input onChange={this.handleUserNameChange}></input>
-          <input onChange={this.handlePasswordChange}></input>
-          <button onClick={this.handleLogin}> hello</button>
+          <h2>Welcome to Pandemics Tweets First build Hellooooo</h2>
         </div>
       </div>
     );
