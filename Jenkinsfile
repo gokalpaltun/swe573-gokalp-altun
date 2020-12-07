@@ -4,7 +4,7 @@ pipeline {
         stage('Cloning Git') {
           steps{
                 echo "========Git Repo Cloning...========"
-                'https://github.com/gokalpaltun/swe573-gokalp-altun.git'
+                git 'https://github.com/gokalpaltun/swe573-gokalp-altun.git'
           }
         }
         stage("Build all containers with new Image and up with compose"){
