@@ -1,12 +1,12 @@
 pipeline {
     agent any
     stages {
-        stage('Cloning Git') {
-          steps{
-                echo "========Git Repo Cloning...========"
-                git 'https://github.com/gokalpaltun/swe573-gokalp-altun.git'
-          }
-        }
+        // stage('Cloning Git') {
+        //   steps{
+        //         echo "========Git Repo Cloning...========"
+        //         git 'https://github.com/gokalpaltun/swe573-gokalp-altun.git'
+        //   }
+        // }
         stage("Build all containers with new Image and up with compose"){
             steps{
                 script{
