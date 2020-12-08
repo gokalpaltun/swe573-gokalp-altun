@@ -17,7 +17,7 @@ class App extends Component {
     return (
       <div className="App">
         <div className="App-header">
-          <h2>PandemicTweetsApp Git WebHooks Integrated CI/CD is Active</h2>
+          <h2>PandemicTweetsApp</h2>
         </div>
       </div>
     );
