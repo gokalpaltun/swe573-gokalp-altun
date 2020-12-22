@@ -2,7 +2,7 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from .serializers import serializers
-from .services.account import UserService
+from .services.user import UserService
 from .services.location import LocationService
 from .services.search import SearchService
 
