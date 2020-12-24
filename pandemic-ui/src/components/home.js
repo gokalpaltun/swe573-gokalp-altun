@@ -14,7 +14,7 @@ class Home extends Component {
     const { userCtx } = this.props.ctx;
     return (
       <Container>
-        <h1>HOmiee</h1>
+        <h1>Hello User</h1>
       </Container>
     );
   }
