@@ -39,11 +39,6 @@ class NavbarPandemics extends Component {
             <Navbar.Text hidden={!isLoggedIn}>
               Signed in as: <p>{userCtx.username || ""}</p>
             </Navbar.Text>
-            <Nav.Item>
-              <Button onClick={this.handleTest} variant="outline-info">
-                Test
-              </Button>
-            </Nav.Item>
           </Navbar.Collapse>
         </Navbar>
       </div>
