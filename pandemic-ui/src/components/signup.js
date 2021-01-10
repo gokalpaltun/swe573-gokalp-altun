@@ -1,7 +1,8 @@
 import React, { Component } from "react";
-
+import { connect } from "react-redux";
 import { Form, Button, Container } from "react-bootstrap";
 import UserService from "../services/user";
+import { userSignup } from "../actions/userSignup";
 
 class SignUp extends Component {
   constructor() {
@@ -22,6 +23,7 @@ class SignUp extends Component {
         password: this.state.password,
         email: this.state.email,
       });
+      this.props.userSignup(user);
       this.props.history.push("/home");
     } catch (error) {
       alert(error.message);
@@ -80,4 +82,4 @@ class SignUp extends Component {
     );
   }
 }
-export default SignUp;
+export default connect(null, { userSignup })(SignUp);
