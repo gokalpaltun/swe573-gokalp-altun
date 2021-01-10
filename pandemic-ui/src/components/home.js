@@ -47,6 +47,7 @@ const FocusGraph = () => {
       graphData={data}
       nodeLabel="id"
       nodeAutoColorBy="group"
+      nodeColor={(no) => (no.id === "bisma86607792" ? "#ff0000" : "#00ff00")}
       onNodeClick={handleClick}
       onLinkClick={handleLinkClick}
       linkDirectionalArrowLength={3.5}
