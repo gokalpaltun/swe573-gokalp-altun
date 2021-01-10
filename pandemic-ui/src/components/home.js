@@ -1,6 +1,7 @@
 import React, { Component, useRef, useCallback } from "react";
 import { Container } from "react-bootstrap";
 import { connect } from "react-redux";
+
 import {
   ForceGraph2D,
   ForceGraph3D,
@@ -9,6 +10,7 @@ import {
 } from "react-force-graph";
 
 import data from "./test.json";
+import login from "./login";
 
 const FocusGraph = () => {
   const fgRef = useRef();
@@ -30,7 +32,7 @@ const FocusGraph = () => {
         node, // lookAt ({ x, y, z })
         3000 // ms transition duration
       );
-      aaa();
+      // aaa();
     },
     [fgRef]
   );
@@ -67,7 +69,12 @@ class Home extends Component {
 
   render() {
     const { userCtx } = this.props.ctx;
-    return <FocusGraph />;
+    if (userCtx.username) {
+      return <FocusGraph />;
+    } else {
+      this.props.history.push("/login");
+      return <login />;
+    }
   }
 }
 const mapStateToProps = (state) => ({
