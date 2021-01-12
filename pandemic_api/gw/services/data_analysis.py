@@ -142,3 +142,6 @@ class DataAnalysisService:
 das = DataAnalysisService()
 das.query()
 das.send_data_to_S3()
+
+
+
