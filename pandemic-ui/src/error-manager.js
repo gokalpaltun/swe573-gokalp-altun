@@ -19,6 +19,11 @@ const ERROR_TYPES = {
       message: "You dont have authorization to view this page.",
     },
   },
+  417: {
+    analysis_cannot_finished: {
+      message: "Analysis cannot finished with success status",
+    },
+  },
 };
 
 class ErrorManager {

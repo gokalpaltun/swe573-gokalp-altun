@@ -1,5 +1,5 @@
 class Configuration {
-  BASE_URL = "http://54.78.219.186:8000//api/v1/";
+  BASE_URL = "http://54.78.219.186:8000/api/v1/";
 
   USER_SERVICES = {
     LOGIN: {
@@ -21,6 +21,12 @@ class Configuration {
     HELLO: {
       url: this.BASE_URL + "hello/",
       method: "GET",
+    },
+  };
+  ANALYSIS_SERVICE = {
+    ANALYSIS: {
+      url: this.BASE_URL + "analysis/",
+      method: "POST",
     },
   };
 }
