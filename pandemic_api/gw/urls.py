@@ -26,4 +26,9 @@ urlpatterns = [
         views.hello,
         name='hello'
     ),
+    url(
+        r'api/v1/analysis/',
+        views.analysis,
+        name='analysis'
+    ),
 ]

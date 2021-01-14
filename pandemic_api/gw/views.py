@@ -5,6 +5,7 @@ from .serializers import serializers
 from .services.user import UserService
 from .services.location import LocationService
 from .services.search import SearchService
+from .services.data_analysis import DataAnalysisService
 
 from django.http import JsonResponse
 from .base_errors import errors
@@ -70,3 +71,25 @@ def hello(request):
         raise errors.AnonymousUserError()
     user = serializers.UserSerializer(request.user, many=False).data
     return Response(user)
+
+
+@permission_classes([IsAuthenticated])
+@api_view(['POST'])
+def analysis(request):
+    if request.user.is_anonymous:
+        raise errors.AnonymousUserError()
+    query = request.data["query"]
+    user_meta = {
+        "username": request.user.username,
+    }
+    try:
+        data_analysis_service = DataAnalysisService(user=user_meta, query=query)
+        data_analysis_service.start_analysis()
+        data_analysis_service.send_data_to_S3()
+        
+        res = {
+            "status": True
+        }
+        return Response(res)
+    except Exception:
+        raise errors.AnalysisHaveError()

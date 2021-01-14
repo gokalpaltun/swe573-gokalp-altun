@@ -19,3 +19,9 @@ class UserCannotLogin(APIException):
     status_code = status.HTTP_400_BAD_REQUEST
     default_detail = 'User cannot login successfuly'
     default_code = 'user_cannot_login'
+
+
+class AnalysisHaveError(APIException):
+    status_code = status.HTTP_417_EXPECTATION_FAILED
+    default_detail = 'Analysis cannot finished with success status'
+    default_code = 'analysis_cannot_finished'

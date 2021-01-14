@@ -28,6 +28,11 @@ class DataAnalysisService:
     tweet_authors_meta_ids = []
     tweet_authors_meta_usernames = []
 
+    def __init__(self, user, query) -> None:
+        super().__init__()
+        self.user = user
+        self.query = query
+
     def prep_data_with_response(self, response):
         users = response["includes"]["users"]
         referenced_tweets = response["includes"]["tweets"]
@@ -65,7 +70,7 @@ class DataAnalysisService:
                 self.tweet_authors_meta_usernames.append(
                     creator_author["username"])
 
-    def query(self, recursion=RECURSION, max_result=MAX_RESULT):
+    def start_analysis(self, recursion=RECURSION, max_result=MAX_RESULT):
         base_url = config("API_URL", cast=str)
         headers = {
             'content-type': 'application/json',
@@ -73,7 +78,7 @@ class DataAnalysisService:
         }
         params = {
             'max_results': max_result,
-            'query': 'corona pandemic is:retweet lang:en has:mentions',
+            'query': f'{self.query} is:retweet lang:en has:mentions',
             'expansions': 'referenced_tweets.id,referenced_tweets.id.author_id',
             'tweet.fields': 'public_metrics'
         }
@@ -120,28 +125,24 @@ class DataAnalysisService:
 
     def send_data_to_S3(self):
         graph_data = self.generate_graph_data_json()
-
-        with open("testpython.json", "w") as test_file:
+        graph_data["user"] = self.user
+        graph_data["query"] = self.query
+        
+        filename = f'{self.query.replace(" ", "_")}.json'
+        with open(filename, "w") as test_file:
             test_file.write(json.dumps(graph_data))
 
+        
         s3_resource = boto3.resource(
             's3',
             region_name=config('REGION_NAME', cast=str),
             aws_access_key_id=config('AWS_ACCESS_KEY_ID', cast=str),
             aws_secret_access_key=config('AWS_SECRET_ACCESS_KEY', cast=str)
         )
-        s3_resource.Object("swedata", "testpython.json").upload_file(
-            Filename="testpython.json",
+        s3_resource.Object("swedata", filename).upload_file(
+            Filename=filename,
             ExtraArgs={
                 "ContentType": "application/json"
             }
         )
-        os.remove("testpython.json")
-
-# TEST REASON
-das = DataAnalysisService()
-das.query()
-das.send_data_to_S3()
-
-
-
+        os.remove(filename)
