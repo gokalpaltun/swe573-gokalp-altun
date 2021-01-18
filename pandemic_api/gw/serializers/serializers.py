@@ -15,7 +15,7 @@ class TokenSerializer(serializers.ModelSerializer):
         model = Token
         fields = ('key', 'created', 'user_id')
 
-class SearchSerializers(serializers.ModelSerializer):
+class SearchSerializer(serializers.ModelSerializer):
     class Meta:
         model = Search
-        fields = ('last_looked_region', 'last_search_keyword', 'last_looked' ,'user_id')
+        fields = ('username', 'query' ,'graph_data')

@@ -1,3 +1,4 @@
+from .search import SearchService
 import numpy as np
 import pandas as pd
 import requests
@@ -32,6 +33,7 @@ class DataAnalysisService:
         super().__init__()
         self.user = user
         self.query = query
+        self.search_service = SearchService()
 
     def prep_data_with_response(self, response):
         users = response["includes"]["users"]
@@ -127,12 +129,19 @@ class DataAnalysisService:
         graph_data = self.generate_graph_data_json()
         graph_data["user"] = self.user
         graph_data["query"] = self.query
-        
+        graph_data_meta = {
+            "nodes": len(graph_data["nodes"]),
+            "edges": len(graph_data["links"])
+        }
+        graph_data_meta_json = json.dumps(graph_data_meta)
+
+        self.search_service.insert_user_search(
+            username=self.user["username"], query=self.query, graph_data=graph_data_meta_json)
+
         filename = f'{self.query.replace(" ", "_")}.json'
         with open(filename, "w") as test_file:
             test_file.write(json.dumps(graph_data))
 
-        
         s3_resource = boto3.resource(
             's3',
             region_name=config('REGION_NAME', cast=str),
