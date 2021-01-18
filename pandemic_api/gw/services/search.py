@@ -13,5 +13,5 @@ class SearchService:
 
     @staticmethod
     def insert_user_search(username, query, graph_data):
-        search = Search(2, username, query, graph_data)
+        search = Search(username=username, query=query, graph_data=graph_data)
         search.save()
