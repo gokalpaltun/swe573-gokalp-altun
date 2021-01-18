@@ -1,6 +1,7 @@
 import React from "react";
 import { Search } from "../../components/search";
 import AnalysisService from "../../services/analysis";
+import SearchService from "../../services/search";
 
 export class SearchPage extends React.PureComponent {
   constructor() {
@@ -11,6 +12,7 @@ export class SearchPage extends React.PureComponent {
       query: "",
     };
     this.analysisService = new AnalysisService();
+    this.searchService = new SearchService();
   }
 
   onAnalysisClicked = async (e) => {
@@ -31,6 +33,15 @@ export class SearchPage extends React.PureComponent {
       }
     }
   };
+
+  componentDidMount() {
+    this.searchService
+      .search()
+      .then((data) => {
+        this.setState({ existedAnalysisList: data.searchItems });
+      })
+      .catch((err) => console.log(err));
+  }
 
   componentWillReceiveProps(nextProps) {
     this.setState(

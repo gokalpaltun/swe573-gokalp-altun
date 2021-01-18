@@ -1,5 +1,5 @@
 class Configuration {
-  BASE_URL = "http://54.78.219.186:8000/api/v1/";
+  BASE_URL = "http://localhost:8000/api/v1/";
 
   USER_SERVICES = {
     LOGIN: {

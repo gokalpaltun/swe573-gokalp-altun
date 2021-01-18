@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, Container, Form } from "react-bootstrap";
+import { Button, Card, Container, Form, Row } from "react-bootstrap";
 
 export const Search = ({
   searchChange,
@@ -26,9 +26,32 @@ export const Search = ({
             Start Analysis
           </Button>
         </Form>
+        <hr></hr>
       </Container>
-
-      {/* {existedAnalysisList.map((analyItem, index) => (<h1>hello</h1>))} */}
+      <Row>
+        {existedAnalysisList
+          ? existedAnalysisList.map((analysis) => {
+              return (
+                <Card
+                  key={1}
+                  text={"dark"}
+                  style={{ width: "18rem" }}
+                  className="mb-2"
+                >
+                  <Card.Header>{analysis.query}</Card.Header>
+                  <Card.Body>
+                    <Card.Title>Graph Features</Card.Title>
+                    <Card.Text>
+                      Total Nodes:{analysis.graph_data.nodes}
+                      <hr></hr>
+                      Total Edges:{analysis.graph_data.edges}
+                    </Card.Text>
+                  </Card.Body>
+                </Card>
+              );
+            })
+          : null}
+      </Row>
     </Container>
   );
 };
