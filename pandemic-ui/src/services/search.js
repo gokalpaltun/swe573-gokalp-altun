@@ -23,5 +23,26 @@ class SearchService {
       throw new Error(error);
     }
   }
+  async getGraphData(fileName) {
+    try {
+      localStorage.removeItem("graphData");
+      const { url, method } = this.config.SEARCH_SERVICE.GRAPH_DATA;
+      const s3Url = url + fileName;
+      const serverResponse = await this.serviceManager.callService({
+        headers: {
+          Accept: "application/json",
+        },
+        method,
+        url: s3Url,
+        data: undefined,
+        params: undefined,
+      });
+      const { data } = serverResponse;
+      localStorage.setItem("graphData", JSON.stringify(data));
+      return data;
+    } catch (error) {
+      throw new Error(error);
+    }
+  }
 }
 export default SearchService;

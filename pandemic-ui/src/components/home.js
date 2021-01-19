@@ -1,48 +1,28 @@
 import React, { Component, useRef, useCallback } from "react";
-import { Container } from "react-bootstrap";
 import { connect } from "react-redux";
 
-import {
-  ForceGraph2D,
-  ForceGraph3D,
-  ForceGraphVR,
-  ForceGraphAR,
-} from "react-force-graph";
-
-import data from "./test.json";
-import login from "./login";
+import { ForceGraph3D } from "react-force-graph";
 
 const FocusGraph = () => {
   const fgRef = useRef();
-
-  const aaa = async () => {
-    setTimeout(() => {
-      alert("hello");
-    }, 5000);
-  };
-
   const handleClick = useCallback(
     (node) => {
-      // Aim at node from outside it
       const distance = 40;
       const distRatio = 1 + distance / Math.hypot(node.x, node.y, node.z);
 
       fgRef.current.cameraPosition(
         { x: node.x * distRatio, y: node.y * distRatio, z: node.z * distRatio }, // new position
-        node, // lookAt ({ x, y, z })
-        3000 // ms transition duration
+        node,
+        3000
       );
-      // aaa();
+      // call function
     },
     [fgRef]
   );
-
   const handleLinkClick = useCallback((link) => {
-    // Aim at node from outside it
-    console.log(link);
     alert(link.Text);
   });
-
+  const data = JSON.parse(localStorage.getItem("graphData"));
   return (
     <ForceGraph3D
       ref={fgRef}
@@ -63,7 +43,7 @@ class Home extends Component {
     super();
     this.state = {
       user: {},
-      data: data,
+      data: JSON.parse(localStorage.getItem("graphData")),
     };
   }
 

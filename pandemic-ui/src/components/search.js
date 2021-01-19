@@ -6,6 +6,7 @@ export const Search = ({
   query,
   existedAnalysisList,
   onAnalysisClicked,
+  onShowGraphClicked,
 }) => {
   return (
     <Container>
@@ -46,6 +47,9 @@ export const Search = ({
                       <hr></hr>
                       Total Edges:{analysis.graph_data.edges}
                     </Card.Text>
+                    <Button onClick={onShowGraphClicked} value={analysis.query}>
+                      Show
+                    </Button>
                   </Card.Body>
                 </Card>
               );

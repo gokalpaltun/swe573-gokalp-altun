@@ -34,6 +34,23 @@ export class SearchPage extends React.PureComponent {
     }
   };
 
+  onShowGraphClicked = async (e) => {
+    let queryArgs = e.target.value.split(" ");
+    let fileName = "";
+    for (let index = 0; index < queryArgs.length; index++) {
+      const arg = queryArgs[index];
+      if (index === 0 || index === queryArgs.length - 1) {
+        fileName += arg;
+      } else if (index !== 0 && index !== queryArgs.length - 1) {
+        fileName += `_${arg}_`;
+      }
+    }
+    fileName += ".json";
+    const graphData = await this.searchService.getGraphData(fileName);
+    this.props.history.push("/home");
+    return graphData;
+  };
+
   componentDidMount() {
     this.searchService
       .search()
@@ -77,6 +94,7 @@ export class SearchPage extends React.PureComponent {
           searchChange={this.searchChange}
           existedAnalysisList={this.state.existedAnalysisList}
           onAnalysisClicked={this.onAnalysisClicked}
+          onShowGraphClicked={this.onShowGraphClicked}
         />
       </div>
     );
