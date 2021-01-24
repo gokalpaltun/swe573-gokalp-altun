@@ -20,7 +20,7 @@ class SearchService {
       const { data } = serverResponse.data;
       return { searchItems: data.searched_items };
     } catch (error) {
-      throw new Error(error);
+      throw error;
     }
   }
   async getGraphData(fileName) {
@@ -41,7 +41,7 @@ class SearchService {
       localStorage.setItem("graphData", JSON.stringify(data));
       return data;
     } catch (error) {
-      throw new Error(error);
+      throw error;
     }
   }
 }

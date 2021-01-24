@@ -20,7 +20,7 @@ class AnalysisService {
       const { data } = serverResponse.data;
       return { status: data.status };
     } catch (error) {
-      throw new Error(error);
+      throw error;
     }
   }
 }

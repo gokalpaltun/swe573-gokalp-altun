@@ -23,7 +23,7 @@ class UserService {
         user: data.user,
       };
     } catch (error) {
-      throw new Error(error);
+      throw error;
     }
   }
   async userLogin({ username, password }) {
@@ -43,7 +43,7 @@ class UserService {
         user: data.user,
       };
     } catch (error) {
-      throw new Error(error);
+      throw error;
     }
   }
 }
