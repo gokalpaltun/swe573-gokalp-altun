@@ -19,10 +19,17 @@ class ServiceManager {
         return serverResponse;
       })
       .catch((err) => {
-        const { meta } = err.response.data;
-        throw new Error(
-          this.errorManager.getErrorMessage(meta.status_code, meta.default_code)
-        );
+        if (err.response && err.response.data && err.response.data.meta) {
+          const { meta } = err.response.data;
+          throw new Error(
+            this.errorManager.getErrorMessage(
+              meta.status_code,
+              meta.default_code
+            )
+          );
+        } else {
+          throw new Error(this.errorManager.getErrorMessage(1000, "unknown"));
+        }
       });
   }
 }

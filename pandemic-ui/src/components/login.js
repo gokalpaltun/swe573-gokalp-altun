@@ -17,7 +17,7 @@ class Login extends Component {
   handleLogin = async (event) => {
     event.preventDefault();
     try {
-      const { token, user } = await this.userService.userLogin({
+      const { user } = await this.userService.userLogin({
         username: this.state.username,
         password: this.state.password,
       });

@@ -1,55 +1,50 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { Component, useRef, useCallback } from "react";
-import { Container } from "react-bootstrap";
 import { connect } from "react-redux";
 
-import {
-  ForceGraph2D,
-  ForceGraph3D,
-  ForceGraphVR,
-  ForceGraphAR,
-} from "react-force-graph";
-
-import data from "./test.json";
-import login from "./login";
+import { ForceGraph3D } from "react-force-graph";
 
 const FocusGraph = () => {
   const fgRef = useRef();
-
-  const aaa = async () => {
-    setTimeout(() => {
-      alert("hello");
-    }, 5000);
-  };
-
   const handleClick = useCallback(
     (node) => {
-      // Aim at node from outside it
       const distance = 40;
       const distRatio = 1 + distance / Math.hypot(node.x, node.y, node.z);
 
       fgRef.current.cameraPosition(
         { x: node.x * distRatio, y: node.y * distRatio, z: node.z * distRatio }, // new position
-        node, // lookAt ({ x, y, z })
-        3000 // ms transition duration
+        node,
+        3000
       );
-      // aaa();
+      // call function
     },
     [fgRef]
   );
-
   const handleLinkClick = useCallback((link) => {
-    // Aim at node from outside it
-    console.log(link);
     alert(link.Text);
   });
+  const data = JSON.parse(localStorage.getItem("graphData"));
 
+  const colorizeNodes = (node) => {
+    const { betweenness_centrality, degree } = data;
+    // if (betweenness_centrality[node.id] && degree[node.id]) {
+    //   return "#FFC300" //orange
+    // }
+    if (betweenness_centrality[node.id]) {
+      return "#ff0000"; //red
+    }
+    if (degree[node.id]) {
+      return "#F3F3F3"; //yellow
+    }
+    return "#00ff00";
+  };
   return (
     <ForceGraph3D
       ref={fgRef}
       graphData={data}
       nodeLabel="id"
       nodeAutoColorBy="group"
-      nodeColor={(no) => (no.id === "bisma86607792" ? "#ff0000" : "#00ff00")}
+      nodeColor={(node) => colorizeNodes(node)}
       onNodeClick={handleClick}
       onLinkClick={handleLinkClick}
       linkDirectionalArrowLength={3.5}
@@ -63,14 +58,18 @@ class Home extends Component {
     super();
     this.state = {
       user: {},
-      data: data,
+      data: JSON.parse(localStorage.getItem("graphData")),
     };
   }
 
   render() {
     const { userCtx } = this.props.ctx;
     if (userCtx.username) {
-      return <FocusGraph />;
+      if (this.state.data) {
+        return <FocusGraph />;
+      } else {
+        this.props.history.push("/search");
+      }
     } else {
       this.props.history.push("/login");
       return <login />;

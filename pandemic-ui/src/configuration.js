@@ -1,5 +1,6 @@
 class Configuration {
-  BASE_URL = "http://54.78.219.186:8000//api/v1/";
+  BASE_URL = "http://localhost:8000/api/v1/";
+  BASE_URL_AWS = "https://swedata.s3-eu-west-1.amazonaws.com/";
 
   USER_SERVICES = {
     LOGIN: {
@@ -16,11 +17,21 @@ class Configuration {
       url: this.BASE_URL + "search/",
       method: "GET",
     },
+    GRAPH_DATA: {
+      url: this.BASE_URL_AWS,
+      method: "GET",
+    },
   };
   TEST_SERVICES = {
     HELLO: {
       url: this.BASE_URL + "hello/",
       method: "GET",
+    },
+  };
+  ANALYSIS_SERVICE = {
+    ANALYSIS: {
+      url: this.BASE_URL + "analysis/",
+      method: "POST",
     },
   };
 }

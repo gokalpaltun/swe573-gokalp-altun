@@ -6,12 +6,6 @@ from . import views
 
 urlpatterns = [
     url(
-        r'api/v1/init/',
-        # auth_token_views.obtain_auth_token,
-        views.init,
-        name='init'
-    ),
-    url(
         r'api/v1/login/',
         views.login,
         name='login'
@@ -25,5 +19,15 @@ urlpatterns = [
         r'api/v1/hello/',
         views.hello,
         name='hello'
+    ),
+    url(
+        r'api/v1/analysis/',
+        views.analysis,
+        name='analysis'
+    ),
+    url(
+        r'api/v1/search/',
+        views.search,
+        name='search'
     ),
 ]
