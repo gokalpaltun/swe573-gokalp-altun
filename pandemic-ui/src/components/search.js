@@ -4,9 +4,9 @@ import { Button, Card, Container, Form, Row } from "react-bootstrap";
 export const Search = ({
   searchChange,
   query,
-  existedAnalysisList,
   onAnalysisClicked,
   onShowGraphClicked,
+  filteredAnalysisList,
 }) => {
   return (
     <Container>
@@ -30,8 +30,8 @@ export const Search = ({
         <hr></hr>
       </Container>
       <Row>
-        {existedAnalysisList
-          ? existedAnalysisList.map((analysis) => {
+        {filteredAnalysisList
+          ? filteredAnalysisList.map((analysis) => {
               return (
                 <Card
                   key={1}

@@ -26,10 +26,16 @@ export class SearchPage extends React.PureComponent {
       try {
         const { status } = await this.analysisService.dataAnalysis({ query });
         if (status) {
-          alert("finished");
+          this.fetchAllSearchedCategories();
+          this.setState({ query: "" }, () => this.filterList());
         }
       } catch (error) {
-        throw new Error(error);
+        if (error.code === 417) {
+          alert("Cannot find tweets or users with using these keywords");
+        } else {
+          alert(error);
+        }
+        this.setState({ query: "" }, () => this.filterList());
       }
     }
   };
@@ -52,13 +58,27 @@ export class SearchPage extends React.PureComponent {
   };
 
   componentDidMount() {
+    this.fetchAllSearchedCategories();
+  }
+
+  fetchAllSearchedCategories = async () => {
     this.searchService
       .search()
       .then((data) => {
-        this.setState({ existedAnalysisList: data.searchItems });
+        this.setState({
+          existedAnalysisList: data.searchItems,
+          filteredAnalysisList: data.searchItems,
+        });
       })
-      .catch((err) => console.log(err));
-  }
+      .catch((err) => {
+        if (err.code === 401) {
+          this.props.history.push("/login");
+        } else {
+          alert(err);
+        }
+        this.setState({ query: "" }, () => this.filterList());
+      });
+  };
 
   componentWillReceiveProps(nextProps) {
     this.setState(
@@ -77,11 +97,11 @@ export class SearchPage extends React.PureComponent {
 
   filterList = () => {
     let existedAnalysisList = this.state.existedAnalysisList;
-    let searchAnalysis = this.state.searchAnalysis;
+    let searchAnalysis = this.state.query;
     existedAnalysisList =
       existedAnalysisList &&
       existedAnalysisList.filter((cat) => {
-        return cat.title.toLowerCase().indexOf(searchAnalysis) !== -1;
+        return cat.query.toLowerCase().indexOf(searchAnalysis) !== -1;
       });
     this.setState({ filteredAnalysisList: existedAnalysisList });
   };
@@ -90,9 +110,10 @@ export class SearchPage extends React.PureComponent {
     return (
       <div>
         <Search
+          query={this.state.query}
           searchAnalysis={this.state.searchAnalysis}
           searchChange={this.searchChange}
-          existedAnalysisList={this.state.existedAnalysisList}
+          filteredAnalysisList={this.state.filteredAnalysisList}
           onAnalysisClicked={this.onAnalysisClicked}
           onShowGraphClicked={this.onShowGraphClicked}
         />

@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { Component, useRef, useCallback } from "react";
 import { connect } from "react-redux";
 
