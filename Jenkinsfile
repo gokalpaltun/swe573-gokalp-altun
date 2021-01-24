@@ -1,6 +1,14 @@
 pipeline {
     agent any
+    environment {
+        AWS_ACCESS_KEY_ID = credentials('awstest')
+    }
     stages {
+        stage('Env Test') {
+          steps{
+                echo AWS_ACCESS_KEY_ID
+          }
+        }
         stage('Cloning Git') {
           steps{
                 echo "========Git Repo Cloning...========"
