@@ -24,13 +24,27 @@ const FocusGraph = () => {
     alert(link.Text);
   });
   const data = JSON.parse(localStorage.getItem("graphData"));
+
+  const colorizeNodes = (node) => {
+    const { betweenness_centrality, degree } = data;
+    // if (betweenness_centrality[node.id] && degree[node.id]) {
+    //   return "#FFC300" //orange
+    // }
+    if (betweenness_centrality[node.id]) {
+      return "#ff0000"; //red
+    }
+    if (degree[node.id]) {
+      return "#F3F3F3"; //yellow
+    }
+    return "#00ff00";
+  };
   return (
     <ForceGraph3D
       ref={fgRef}
       graphData={data}
       nodeLabel="id"
       nodeAutoColorBy="group"
-      nodeColor={(no) => (no.id === "bisma86607792" ? "#ff0000" : "#00ff00")}
+      nodeColor={(node) => colorizeNodes(node)}
       onNodeClick={handleClick}
       onLinkClick={handleLinkClick}
       linkDirectionalArrowLength={3.5}
