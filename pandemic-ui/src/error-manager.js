@@ -29,10 +29,27 @@ const ERROR_TYPES = {
 class ErrorManager {
   getErrorMessage(errorStatusCode, errorDetaultCode) {
     if (ERROR_TYPES[errorStatusCode][errorDetaultCode].message) {
-      throw new Error(ERROR_TYPES[errorStatusCode][errorDetaultCode].message);
+      const err = new CustomError(
+        ERROR_TYPES[errorStatusCode][errorDetaultCode].message,
+        errorStatusCode
+      );
+      if (err.code === 401) {
+        localStorage.removeItem("state");
+        localStorage.removeItem("graphData");
+      }
+      throw err;
     } else {
       throw new Error("unknown error");
     }
+  }
+}
+
+class CustomError extends Error {
+  constructor(message, code) {
+    super();
+    this.name = "CustomError";
+    this.message = message;
+    this.code = code;
   }
 }
 
