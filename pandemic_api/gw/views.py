@@ -75,7 +75,7 @@ def analysis(request):
             "status": True
         }
         return Response(res)
-    except Exception:
+    except:
         raise errors.AnalysisHaveError()
 
 
