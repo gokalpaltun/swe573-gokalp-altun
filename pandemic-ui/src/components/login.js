@@ -22,7 +22,7 @@ class Login extends Component {
         password: this.state.password,
       });
       this.props.userLogin(user);
-      this.props.history.push("/home");
+      this.props.history.push("/search");
     } catch (error) {
       alert(error.message);
     }
