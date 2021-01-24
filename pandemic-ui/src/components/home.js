@@ -50,7 +50,11 @@ class Home extends Component {
   render() {
     const { userCtx } = this.props.ctx;
     if (userCtx.username) {
-      return <FocusGraph />;
+      if (this.state.data) {
+        return <FocusGraph />;
+      } else {
+        this.props.history.push("/search");
+      }
     } else {
       this.props.history.push("/login");
       return <login />;
