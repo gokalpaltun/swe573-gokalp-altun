@@ -121,7 +121,7 @@ class DataAnalysisService:
         # di_graph = nx.from_pandas_edgelist(df_relation.head(550), 'ActionTakerUsername', 'CreatorUsername', [
         #                                    'Action', 'TweetId', 'Text'], create_using=nx.DiGraph())
         graph = nx.from_pandas_edgelist(df_relation.head(
-            550), 'ActionTakerUsername', 'CreatorUsername', ['Action', 'TweetId', 'Text'])
+            1000000), 'ActionTakerUsername', 'CreatorUsername', ['Action', 'TweetId', 'Text'])
         data = json_graph.node_link_data(graph)
         return data
 

@@ -7,9 +7,9 @@ class SearchService:
     @staticmethod
     def get_search_history(user):
         if(user != None):
-            return Search.objects.filter(username=user.username)
+            return Search.objects.filter(username=user.username).order_by("-id")
         else:
-            return Search.objects.all()
+            return Search.objects.order_by("-id")
 
     @staticmethod
     def insert_user_search(username, query, graph_data):

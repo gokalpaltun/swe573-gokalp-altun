@@ -85,9 +85,9 @@ def search(request):
     if request.user.is_anonymous is True:
         search_history = SearchService.get_search_history(user=None)
     elif request.user.is_anonymous is False:
-        search_history = SearchService.get_search_history(user=request.user)
+        search_history = SearchService.get_search_history(user=None)
     search_result = serializers.SearchSerializer(
-            search_history, many=True).data  
+        search_history, many=True).data
     res = {"searched_items": []}
     for item in search_result:
         search_item = {
