@@ -72,7 +72,7 @@ class Home extends Component {
       }
     } else {
       this.props.history.push("/login");
-      return <login />
+      return <login />;
     }
   }
 }
