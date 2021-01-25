@@ -27,14 +27,13 @@ export const Search = ({
             Start Analysis
           </Button>
         </Form>
-        <hr></hr>
       </Container>
       <Row>
         {filteredAnalysisList
           ? filteredAnalysisList.map((analysis) => {
               return (
                 <Card
-                  key={1}
+                  key={Math.floor(Math.random() * 10000)}
                   text={"dark"}
                   style={{ width: "18rem" }}
                   className="mb-2"
@@ -44,7 +43,6 @@ export const Search = ({
                     <Card.Title>Graph Features</Card.Title>
                     <Card.Text>
                       Total Nodes:{analysis.graph_data.nodes}
-                      <hr></hr>
                       Total Edges:{analysis.graph_data.edges}
                     </Card.Text>
                     <Button onClick={onShowGraphClicked} value={analysis.query}>
