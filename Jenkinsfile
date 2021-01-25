@@ -37,6 +37,7 @@ pipeline {
                         echo 'Exception occurred: ' + e.toString()
                     }
                 }
+                
             }
         }
     }
