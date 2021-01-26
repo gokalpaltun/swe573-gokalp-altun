@@ -1,5 +1,5 @@
 from operator import itemgetter
-from .search import SearchService
+# from .search import SearchService
 import numpy as np
 import pandas as pd
 import requests
@@ -9,6 +9,10 @@ import os
 import json
 import boto3
 from decouple import config
+import string
+import re
+from nltk.tokenize import TweetTokenizer
+import emoji
 RECURSION = 100
 MAX_RESULT = 100
 
@@ -34,7 +38,7 @@ class DataAnalysisService:
         super().__init__()
         self.user = user
         self.query = query
-        self.search_service = SearchService()
+        # self.search_service = SearchService()
 
     def prep_data_with_response(self, response):
         users = response["includes"]["users"]
@@ -116,6 +120,18 @@ class DataAnalysisService:
                 "Text": np.array(self.tweet_texts_relation),
             }
         )
+        df_meta = pd.DataFrame(
+            {
+                "TweetId": np.array(self.tweet_ids_meta),
+                "LikeCounts": np.array(self.like_counts),
+                "QuoteCounts": np.array(self.quote_counts),
+                "ReplyCounts": np.array(self.reply_counts),
+                "RetweetCounts": np.array(self.retweet_counts),
+                "Text": np.array(self.tweet_texts),
+                "CreatorUsername": np.array(self.tweet_authors_meta_usernames),
+                "CreatorId": np.array(self.tweet_authors_meta_ids),
+            }
+        )
         graph = nx.from_pandas_edgelist(df_relation.head(
             1000000), 'ActionTakerUsername', 'CreatorUsername', ['Action', 'TweetId', 'Text'])
         data = json_graph.node_link_data(graph)
@@ -137,8 +153,8 @@ class DataAnalysisService:
         for d in sorted_degree[:20]:
             data["degree"][d[0]] = d[1]
             data["comparison_centrality"][d[0]] = {
-                "dc":d[1],
-                "bc":betweenness_dict[d[0]]
+                "dc": d[1],
+                "bc": betweenness_dict[d[0]]
             }
 
         sorted_betweenness = sorted(
@@ -146,10 +162,12 @@ class DataAnalysisService:
         data["betweenness_centrality"] = {}
         for b in sorted_betweenness[:20]:
             data["comparison_centrality"][b[0]] = {
-                "bc":b[1],
-                "dc":degree_dict[b[0]]
+                "bc": b[1],
+                "dc": degree_dict[b[0]]
             }
             data["betweenness_centrality"][b[0]] = b[1]
+
+        data["word_freq"] = self.get_words_with(tweets=df_meta["Text"])
         return data
 
     def send_data_to_S3(self):
@@ -185,3 +203,26 @@ class DataAnalysisService:
             }
         )
         os.remove(filename)
+
+    def get_words_with(self, tweets):
+        tt = TweetTokenizer(preserve_case=False,
+                            strip_handles=True, reduce_len=True)
+        word_count_dict = {}
+        for tweet in tweets:
+            tweet = self.cleaner(tweet)
+            for word in tt.tokenize(tweet):
+                if word in word_count_dict:
+                    word_count_dict[word] += 1
+                else:
+                    word_count_dict[word] = 1
+        return dict(sorted(word_count_dict.items(), key=lambda item: item[1]))
+
+    def cleaner(self, tweet):
+        tweet = re.sub("@[A-Za-z0-9]+", "", tweet)  # Remove @ sign
+        tweet = re.sub(r"(?:\@|http?\://|https?\://|www)\S+",
+                       "", tweet)
+        tweet = " ".join(tweet.split())
+        tweet = tweet.replace("#", "").replace("_", " ")
+        tweet = tweet.translate(str.maketrans('', '', string.punctuation))
+        tweet = ''.join(c for c in tweet if c not in emoji.UNICODE_EMOJI)
+        return tweet
