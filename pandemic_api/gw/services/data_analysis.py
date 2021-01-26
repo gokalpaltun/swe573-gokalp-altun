@@ -9,7 +9,7 @@ import os
 import json
 import boto3
 from decouple import config
-RECURSION = 30
+RECURSION = 100
 MAX_RESULT = 100
 
 
@@ -116,8 +116,6 @@ class DataAnalysisService:
                 "Text": np.array(self.tweet_texts_relation),
             }
         )
-        # di_graph = nx.from_pandas_edgelist(df_relation.head(550), 'ActionTakerUsername', 'CreatorUsername', [
-        #                                    'Action', 'TweetId', 'Text'], create_using=nx.DiGraph())
         graph = nx.from_pandas_edgelist(df_relation.head(
             1000000), 'ActionTakerUsername', 'CreatorUsername', ['Action', 'TweetId', 'Text'])
         data = json_graph.node_link_data(graph)
@@ -132,20 +130,26 @@ class DataAnalysisService:
                 print(b)
         except Exception as err:
             print(err)
-
+        data["comparison_centrality"] = {}
         sorted_degree = sorted(degree_dict.items(),
                                key=itemgetter(1), reverse=True)
         data["degree"] = {}
         for d in sorted_degree[:20]:
             data["degree"][d[0]] = d[1]
+            data["comparison_centrality"][d[0]] = {
+                "dc":d[1],
+                "bc":betweenness_dict[d[0]]
+            }
 
         sorted_betweenness = sorted(
             betweenness_dict.items(), key=itemgetter(1), reverse=True)
         data["betweenness_centrality"] = {}
         for b in sorted_betweenness[:20]:
-
+            data["comparison_centrality"][b[0]] = {
+                "bc":b[1],
+                "dc":degree_dict[b[0]]
+            }
             data["betweenness_centrality"][b[0]] = b[1]
-
         return data
 
     def send_data_to_S3(self):
@@ -156,7 +160,8 @@ class DataAnalysisService:
             "nodes": len(graph_data["nodes"]),
             "edges": len(graph_data["links"]),
             "betweenness_centrality": graph_data["betweenness_centrality"],
-            "degree": graph_data["degree"]
+            "degree": graph_data["degree"],
+            "comparison_centrality": graph_data["comparison_centrality"]
         }
         graph_data_meta_json = json.dumps(graph_data_meta)
 
