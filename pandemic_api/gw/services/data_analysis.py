@@ -1,5 +1,5 @@
 from operator import itemgetter
-# from .search import SearchService
+from .search import SearchService
 import numpy as np
 import pandas as pd
 import requests
@@ -38,7 +38,7 @@ class DataAnalysisService:
         super().__init__()
         self.user = user
         self.query = query
-        # self.search_service = SearchService()
+        self.search_service = SearchService()
 
     def prep_data_with_response(self, response):
         users = response["includes"]["users"]

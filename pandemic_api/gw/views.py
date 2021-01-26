@@ -75,7 +75,9 @@ def analysis(request):
             "status": True
         }
         return Response(res)
-    except:
+    except Exception as err:
+        print("analysis_error")
+        print(err)
         raise errors.AnalysisHaveError()
 
 
