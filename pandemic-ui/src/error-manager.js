@@ -16,7 +16,7 @@ const ERROR_TYPES = {
   },
   409: {
     user_already_exists: {
-      message: "You dont have authorization to view this page.",
+      message: "Already Existed email or username",
     },
   },
   417: {
@@ -36,6 +36,7 @@ class ErrorManager {
       if (err.code === 401) {
         localStorage.removeItem("state");
         localStorage.removeItem("graphData");
+        localStorage.removeItem("token");
       }
       throw err;
     } else {

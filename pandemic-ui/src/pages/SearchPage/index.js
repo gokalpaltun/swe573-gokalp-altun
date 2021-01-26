@@ -1,5 +1,5 @@
 import React from "react";
-import { Search } from "../../components/search";
+import { Search } from "../../components/Search";
 import AnalysisService from "../../services/analysis";
 import SearchService from "../../services/search";
 
@@ -10,6 +10,7 @@ export class SearchPage extends React.PureComponent {
       existedAnalysisList: [],
       filteredAnalysisList: [],
       query: "",
+      redirectPage: null,
     };
     this.analysisService = new AnalysisService();
     this.searchService = new SearchService();
@@ -53,7 +54,7 @@ export class SearchPage extends React.PureComponent {
     }
     fileName += ".json";
     const graphData = await this.searchService.getGraphData(fileName);
-    this.props.history.push("/home");
+    this.setState({ redirectPage: "/home" });
     return graphData;
   };
 
@@ -72,9 +73,7 @@ export class SearchPage extends React.PureComponent {
       })
       .catch((err) => {
         if (err.code === 401) {
-          this.props.history.push("/login");
-        } else {
-          alert(err);
+          this.setState({ redirectPage: "/login" });
         }
         this.setState({ query: "" }, () => this.filterList());
       });
@@ -116,6 +115,7 @@ export class SearchPage extends React.PureComponent {
           filteredAnalysisList={this.state.filteredAnalysisList}
           onAnalysisClicked={this.onAnalysisClicked}
           onShowGraphClicked={this.onShowGraphClicked}
+          redirectPage={this.state.redirectPage}
         />
       </div>
     );

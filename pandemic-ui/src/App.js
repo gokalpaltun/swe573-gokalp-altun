@@ -1,12 +1,12 @@
 import React, { Component } from "react";
 import "./App.css";
 import { Switch, Route } from "react-router-dom";
-import Login from "./components/login";
-import SignUp from "./components/signup";
-import Home from "./components/home";
 import { connect } from "react-redux";
-import NavbarPandemics from "./components/NavbarPandemics";
+import Navbar from "./components/Navbar";
 import { SearchPage } from "./pages/SearchPage";
+import LoginPage from "./pages/LoginPage";
+import SignupPage from "./pages/SignupPage";
+import HomePage from "./pages/HomePage";
 
 class App extends Component {
   constructor() {
@@ -22,12 +22,12 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <NavbarPandemics />
+        <Navbar />
         <Switch>
-          <Route exact path="/" component={Home} />
-          <Route path="/login" component={Login} />
-          <Route path="/signup" component={SignUp} />
-          <Route path="/home" component={Home} />
+          <Route exact path="/" component={HomePage} />
+          <Route path="/login" component={LoginPage} />
+          <Route path="/signup" component={SignupPage} />
+          <Route path="/home" component={HomePage} />
           <Route path="/search" component={SearchPage} />
         </Switch>
       </div>

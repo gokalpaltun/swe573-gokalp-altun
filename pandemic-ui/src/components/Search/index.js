@@ -1,14 +1,17 @@
 import React from "react";
 import { Button, Card, Container, Form, Row } from "react-bootstrap";
-
+import { Redirect } from "react-router-dom";
 export const Search = ({
   searchChange,
   query,
   onAnalysisClicked,
   onShowGraphClicked,
   filteredAnalysisList,
+  redirectPage,
 }) => {
-  return (
+  return redirectPage ? (
+    <Redirect to={redirectPage} />
+  ) : (
     <Container>
       <hr />
       <Container>

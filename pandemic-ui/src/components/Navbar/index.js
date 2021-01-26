@@ -1,30 +1,16 @@
 import React, { Component } from "react";
-import { Navbar, Nav, Button } from "react-bootstrap";
+import { Navbar, Nav, Button, Row, Col } from "react-bootstrap";
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
-import TestService from "../services/test";
-
+import { BsSearch } from "react-icons/bs";
 class NavbarPandemics extends Component {
-  constructor() {
-    super();
-    this.testService = new TestService();
-  }
-  handleTest = async () => {
-    try {
-      await this.testService.hello();
-    } catch (error) {
-      alert(error.message);
-      console.log(error);
-    }
-  };
-
   render() {
     const { userCtx, isLoggedIn } = this.props.ctx;
-    console.log(userCtx, isLoggedIn);
     return (
       <div>
         <Navbar bg="dark" variant="dark">
           <Navbar.Brand href="home">PandemicTweetsApp</Navbar.Brand>
+
           <Navbar.Collapse className="justify-content-end px-3">
             <Nav.Item hidden={isLoggedIn}>
               <Button href="Signup" variant="outline-info">
@@ -37,7 +23,19 @@ class NavbarPandemics extends Component {
               </Button>
             </Nav.Item>
             <Navbar.Text hidden={!isLoggedIn}>
-              Signed in as: <p>{userCtx.username || ""}</p>
+              <Row>
+                <Col md={1}>
+                  <Navbar.Brand href="search">
+                    <BsSearch href="search" size={50} />
+                  </Navbar.Brand>
+                </Col>
+                <hr></hr>
+                <Col md={10}>
+                  <div>
+                    Signed in as: <p>{userCtx.username || ""}</p>
+                  </div>
+                </Col>
+              </Row>
             </Navbar.Text>
           </Navbar.Collapse>
         </Navbar>

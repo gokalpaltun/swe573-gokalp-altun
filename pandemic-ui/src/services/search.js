@@ -27,6 +27,7 @@ class SearchService {
     try {
       localStorage.removeItem("graphData");
       const { url, method } = this.config.SEARCH_SERVICE.GRAPH_DATA;
+      fileName = encodeURI(fileName);
       const s3Url = url + fileName;
       const serverResponse = await this.serviceManager.callService({
         headers: {
