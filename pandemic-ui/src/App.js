@@ -1,27 +1,40 @@
 import React, { Component } from "react";
-import logo from "./logo.svg";
 import "./App.css";
-const axios = require("axios").default;
+import { Switch, Route } from "react-router-dom";
+import { connect } from "react-redux";
+import Navbar from "./components/Navbar";
+import { SearchPage } from "./pages/SearchPage";
+import LoginPage from "./pages/LoginPage";
+import SignupPage from "./pages/SignupPage";
+import HomePage from "./pages/HomePage";
 
 class App extends Component {
   constructor() {
     super();
     this.state = {
-      username: "",
-      password: "",
-      email: "asdfasssssdf",
+      userCtx: {},
     };
   }
-
+  componentDidMount() {
+    const { userCtx } = this.props.ctx;
+    this.setState({ userCtx });
+  }
   render() {
     return (
       <div className="App">
-        <div className="App-header">
-          <h2>PandemicTweetsApp Git WebHooks Integrated CI/CD is Active</h2>
-        </div>
+        <Navbar />
+        <Switch>
+          <Route exact path="/" component={HomePage} />
+          <Route path="/login" component={LoginPage} />
+          <Route path="/signup" component={SignupPage} />
+          <Route path="/home" component={HomePage} />
+          <Route path="/search" component={SearchPage} />
+        </Switch>
       </div>
     );
   }
 }
-
-export default App;
+const mapStateToProps = (state) => ({
+  ctx: state.ctx,
+});
+export default connect(mapStateToProps, {})(App);

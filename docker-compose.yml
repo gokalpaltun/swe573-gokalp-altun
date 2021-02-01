@@ -15,21 +15,9 @@ services:
       - "8000:8000"
     networks:
       - db-net
+    env_file:
+      - ./pandemic_api/.env
 
-  pandemic-ui:
-    restart: always
-    command : npm start
-    container_name: pandemic-ui
-    build:
-      context: ./pandemic-ui/
-      dockerfile: Dockerfile
-    ports:
-      - "3000:3000"
-    stdin_open: true
-    depends_on:
-      - pandemic_api
-    networks:
-      - db-net
 
 networks:
   db-net:

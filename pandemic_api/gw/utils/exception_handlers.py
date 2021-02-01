@@ -14,6 +14,6 @@ def response_exception_handler(exc, context):
         response.data["meta"]["detail"] = str(response.data['detail'])
         if hasattr(exc, 'error_code'):
             response.data["meta"]['error_code'] = exc.error_code
-        response.data["data"] = {"hello": "world"}
+        response.data["data"] = {"hello": "SWE573"}
         del response.data["detail"]
     return response

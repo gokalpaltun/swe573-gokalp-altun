@@ -1,0 +1,5 @@
+.force-graph-container canvas {
+  max-width: 1110px;
+  width: 100% !important;
+  height: auto !important;
+}
