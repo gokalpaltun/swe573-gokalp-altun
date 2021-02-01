@@ -13,7 +13,7 @@ import string
 import re
 from nltk.tokenize import TweetTokenizer
 import emoji
-RECURSION = 60
+RECURSION = 25
 MAX_RESULT = 100
 
 
@@ -80,6 +80,7 @@ class DataAnalysisService:
                         self.tweet_authors_meta_usernames.append(
                             creator_author["username"])
                 except Exception as Error:
+                    print("prep_data_with_response")
                     print(Error)
             else:
                 print("boo")
@@ -133,19 +134,10 @@ class DataAnalysisService:
             }
         )
         graph = nx.from_pandas_edgelist(df_relation.head(
-            1000000), 'ActionTakerUsername', 'CreatorUsername', ['Action', 'TweetId', 'Text'])
+            10000), 'ActionTakerUsername', 'CreatorUsername', ['Action', 'TweetId', 'Text'])
         data = json_graph.node_link_data(graph)
         degree_dict = dict(graph.degree(graph.nodes()))
         betweenness_dict = nx.betweenness_centrality(graph)
-        try:
-            eigenvector_dict = nx.eigenvector_centrality(graph)
-            sorted_e_betweenness = sorted(
-                eigenvector_dict.items(), key=itemgetter(1), reverse=True)
-            print("Top 20 nodes by eigenvector centrality:")
-            for b in sorted_e_betweenness[:20]:
-                print(b)
-        except Exception as err:
-            print(err)
         data["comparison_centrality"] = {}
         sorted_degree = sorted(degree_dict.items(),
                                key=itemgetter(1), reverse=True)
