@@ -14,8 +14,11 @@ class HomePage extends Component {
     };
   }
   analysisBtnOnclick = (e) => {
-    this.setState({ lookupTwitterUserName: e.target.value });
-    alert(e.target.value);
+    console.log(e);
+    this.setState({ lookupTwitterUserName: e.target.id });
+  };
+  onNodeClick = (e) => {
+    this.setState({ lookupTwitterUserName: e.id });
   };
   colorizeNodes = (node) => {
     const { betweenness_centrality, degree } = this.state.data;
@@ -52,6 +55,8 @@ class HomePage extends Component {
         comparison_centrality={this.state.data.comparison_centrality}
         key={Math.random() * 1000}
         redirectPage={redirectPage}
+        lookupTwitterUserName={this.state.lookupTwitterUserName}
+        onNodeClick={this.onNodeClick}
       />
     );
   }

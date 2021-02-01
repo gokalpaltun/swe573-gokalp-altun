@@ -12,6 +12,7 @@ class SignUpPage extends Component {
       password: "",
       email: "",
       user: {},
+      redirectPage: "",
     };
     this.userService = new UserService();
   }
@@ -24,7 +25,7 @@ class SignUpPage extends Component {
         email: this.state.email,
       });
       this.props.userSignup(user);
-      alert("signup is ok go to home");
+      this.setState({ redirectPage: "/search" });
     } catch (error) {
       alert(error.message);
     }
@@ -48,6 +49,7 @@ class SignUpPage extends Component {
         handleChange={this.handleChange}
         email={this.state.email}
         password={this.state.password}
+        redirectPage={this.state.redirectPage}
       />
     );
   }

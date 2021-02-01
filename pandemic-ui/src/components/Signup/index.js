@@ -1,14 +1,17 @@
 import React from "react";
 import { Button, Container, Form } from "react-bootstrap";
-
+import { Redirect } from "react-router-dom";
 export const Signup = ({
   handleSignup,
   username,
   handleChange,
   email,
   password,
+  redirectPage,
 }) => {
-  return (
+  return redirectPage ? (
+    <Redirect to={redirectPage} />
+  ) : (
     <Container>
       <Form onSubmit={handleSignup}>
         <Form.Group>
