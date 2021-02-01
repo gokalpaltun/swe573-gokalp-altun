@@ -11,6 +11,7 @@ export class SearchPage extends React.PureComponent {
       filteredAnalysisList: [],
       query: "",
       redirectPage: null,
+      loadingActive: false
     };
     this.analysisService = new AnalysisService();
     this.searchService = new SearchService();
@@ -25,12 +26,15 @@ export class SearchPage extends React.PureComponent {
       alert("At least 3 different search tag");
     } else {
       try {
+        this.setState({ loadingActive: true });
         const { status } = await this.analysisService.dataAnalysis({ query });
         if (status) {
           this.fetchAllSearchedCategories();
           this.setState({ query: "" }, () => this.filterList());
+          this.setState({ loadingActive: false });
         }
       } catch (error) {
+        this.setState({ loadingActive: false });
         if (error.code === 417) {
           alert("Cannot find tweets or users with using these keywords");
         } else {
@@ -66,6 +70,7 @@ export class SearchPage extends React.PureComponent {
     this.searchService
       .search()
       .then((data) => {
+        data.searchItems = data.searchItems.filter(a=>a.graph_data.nodes>100)
         this.setState({
           existedAnalysisList: data.searchItems,
           filteredAnalysisList: data.searchItems,
@@ -116,6 +121,7 @@ export class SearchPage extends React.PureComponent {
           onAnalysisClicked={this.onAnalysisClicked}
           onShowGraphClicked={this.onShowGraphClicked}
           redirectPage={this.state.redirectPage}
+          loadingActive={this.state.loadingActive}
         />
       </div>
     );
