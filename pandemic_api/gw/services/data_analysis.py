@@ -39,6 +39,21 @@ class DataAnalysisService:
         self.user = user
         self.query = query
         self.search_service = SearchService()
+        self.action_taker_ids = []
+        self.action_takers = []
+        self.tweet_ids = []
+        self.creator_ids = []
+        self.creators = []
+        self.tweet_texts_relation = []
+        self.tweet_ids_meta = []
+        self.like_counts = []
+        self.quote_counts = []
+        self.reply_counts = []
+        self.retweet_counts = []
+        self.tweet_texts = []
+        self.tweet_authors_meta_ids = []
+        self.tweet_authors_meta_usernames = []
+
 
     def prep_data_with_response(self, response):
         users = response["includes"]["users"]
@@ -105,8 +120,12 @@ class DataAnalysisService:
                 base_url, params=params, headers=headers).json()
             self.prep_data_with_response(response)
             if("next_token" in response["meta"]):
+                print(self.query)
+                print(response['meta']['next_token'])
                 params['next_token'] = response['meta']['next_token']
             else:
+                print(self.query)
+                params['next_token'] = ""
                 break
 
     def generate_graph_data_json(self):
@@ -160,6 +179,8 @@ class DataAnalysisService:
             data["betweenness_centrality"][b[0]] = b[1]
 
         data["word_freq"] = self.get_words_with(tweets=df_meta["Text"])
+        df_relation = []
+        df_meta = []
         return data
 
     def send_data_to_S3(self):
@@ -181,21 +202,21 @@ class DataAnalysisService:
         filename = f'{self.query.replace(" ", "_")}.json'
         with open(filename, "w") as test_file:
             test_file.write(json.dumps(graph_data))
-
-        s3_resource = boto3.resource(
-            's3',
-            region_name=config('REGION_NAME', cast=str),
-            aws_access_key_id=config('AWS_ACCESS_KEY_ID', cast=str),
-            aws_secret_access_key=config('AWS_SECRET_ACCESS_KEY', cast=str)
-        )
-        s3_resource.Object("swedata", filename).upload_file(
-            Filename=filename,
-            ExtraArgs={
-                "ContentType": "application/json"
-            }
-        )
-        os.remove(filename)
-
+            
+            s3_resource = boto3.resource(
+                's3',
+                region_name=config('REGION_NAME', cast=str),
+                aws_access_key_id=config('AWS_ACCESS_KEY_ID', cast=str),
+                aws_secret_access_key=config('AWS_SECRET_ACCESS_KEY', cast=str)
+            )
+            s3_resource.Object("swedata", filename).upload_file(
+                Filename=filename,
+                ExtraArgs={
+                    "ContentType": "application/json"
+                }
+            )
+            os.remove(filename)
+    
     def get_words_with(self, tweets):
         tt = TweetTokenizer(preserve_case=False,
                             strip_handles=True, reduce_len=True)
