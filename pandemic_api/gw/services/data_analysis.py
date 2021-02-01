@@ -13,7 +13,7 @@ import string
 import re
 from nltk.tokenize import TweetTokenizer
 import emoji
-RECURSION = 100
+RECURSION = 35
 MAX_RESULT = 100
 
 
